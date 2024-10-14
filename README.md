@@ -33,6 +33,6 @@ Please follow the below steps in order. For this example, a new VM is created. T
 
 1.	Create a VM in the subscription you have signed up for this preview.
 2.	Ensure the VM has an availability options set as Availability zone and zone options as self-selected zone. Choose an availability zone (1/2/3) as per your choice.
-   :::image type="content" source="./media/virtual-machines-create-restore-points-portal/create-restore-points-search.png" alt-text="Screenshot of search bar in Azure portal.":::
+   :::image type="content" source="./images/2-Availability-zone-selection.png" alt-text="Screenshot of search bar in Azure portal.":::
 
 3.	In disks tab, select the OS and data disks as zone redundant storage as below - 
