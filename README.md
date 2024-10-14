@@ -43,7 +43,7 @@ Please follow the below steps in order. For this example, a new VM is created. T
   	
 4. If you are using OS disk type as locally redundant storage (LRS) disks you can migrate them to zone redundant storage (ZRS) disks. Please see the documentation here. 
 5.	In networking tab, please provide the details as you normally would. You can choose to have a public IP if needed for testing this feature.   
-6.	Create a tag as below on virtual machine resource – 
+6.	Create a tag `EnableAvailabilityZoneUpdate: true` as below on virtual machine resource – 
 
   	![Screenshot3](./images/VM-tag-value.png)
   	
@@ -52,7 +52,7 @@ Please follow the below steps in order. For this example, a new VM is created. T
 ## Changing zone of VM
 1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
 2.	Uploading the script that orchestrates moving the VM across zones. 
-   a.	Upload the script Change-VMZone.ps1 to cloud shell by navigating to Manage files -> Upload.
+   a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
   	
       ![Screenshot4](./images/upload-script.png)
   	
