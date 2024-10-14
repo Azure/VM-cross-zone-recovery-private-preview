@@ -12,7 +12,7 @@ Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form) as you try
 
 ## Unsupported VM configurations
 - VM that are not pinned to an availability zone.
-- Not supported VMs using [locally redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#locally-redundant-storage-for-managed-disks). as OS/Data disks.
+- VMs using [locally redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#locally-redundant-storage-for-managed-disks) as OS/Data disks.
 - Public IP that are regional/have availability zone as “No Zone”
 - Public IP with SKU as Basic.
 - Private IP that are static. 
@@ -51,13 +51,16 @@ Please follow the below steps in order. For this example, a new VM is created. T
 
 ## Changing zone of VM
 1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
-2.	Uploading the script that orchestrates moving the VM across zones. 
-   a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
+2.	Uploading the script that orchestrates moving the VM across zones.
+   
+      a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
   	
-      ![Screenshot4](./images/upload-script.png)
+         ![Screenshot4](./images/upload-script.png)
   	
-   b.	Optionally you can copy the scripts content on a new file using editors.
+      b.	Optionally you can copy the scripts content on a new file using editors.
+   
 4.	Note the availability zone and the IP address (Public and Private) of the VM you are testing.
+
 5.	To move the VM across zone issue the below command on the CloudShell interface from portal.
    
    `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -newNetworkResourceId {networkResourceId}`
@@ -70,10 +73,10 @@ Please follow the below steps in order. For this example, a new VM is created. T
 |targetZone|New availability zone for virtual machine.|
 |(Optional) newNetworkResourceId|Resource ID for new network interface card to be attached to recovered virtual machine.|
 
-5.	Expected behaviour – 
+6.	Expected behaviour – 
 Refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
 Optionally if you have provided a new network interface id the same ranges will be used to assign the IP address of the recovered VM.
-6.	Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form). 
+7.	Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form). 
 
 
   	
