@@ -1,6 +1,6 @@
 # Enable cross zone recovery for VMs (preview)
 
-Virtual machines can be recovered quickly from zonal outages by moving them across availability zones. This solution guarantees a Recovery Point Objective (RPO) of zero and a Recovery Time Objective (RTO) of ~15 minutes. By using [zone redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#zone-redundant-storage-for-managed-disks) we will are able to provide an RPO of 0. As the feature is dependent on zone redundant disks all its [limitation](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#limitations) will apply to the recovery solution also.
+Virtual machines can be recovered quickly from zonal outages by moving them across availability zones. This solution guarantees a Recovery Point Objective (RPO) of zero and a Recovery Time Objective (RTO) of ~15 minutes. By using [zone redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#zone-redundant-storage-for-managed-disks) we will are able to provide an RPO of 0. As the feature is dependent on zone redundant disks all its [limitation](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#limitations) will apply to the recovery solution as well.
 
 ## Sign up for preview
 
@@ -30,7 +30,7 @@ In this preview customers will be able to move the existing/new virtual machine 
 - Load Balancer and Gateway should be of standard SKU.
 
 ### Create a VM
-Please follow the below steps in order. For this example, a new VM is created. The feature will work for an existing VM please follow the from step 5 onwards if using existing VM. Ensure that the prerequisites are met for the existing VM. 
+Please follow the below steps in order. For this example, a new VM is created. The feature will work for an existing VM. If using existing VM please follow from step 4 onwards. Ensure that the prerequisites are met for the existing VM. 
 
 1.	Create a VM in the subscription you have signed up for this preview.
 2.	Ensure the VM has an availability options set as Availability zone and zone options as self-selected zone. Choose an availability zone (1/2/3) as per your choice.
@@ -41,7 +41,7 @@ Please follow the below steps in order. For this example, a new VM is created. T
 
   	![Screenshot2](./images/os-disk-type-zrs.png)
   	
-4. If you are using OS disk type as locally redundant storage (LRS) disks you can migrate them to zone redundant storage (ZRS) disks. Please see the documentation here. 
+4. If you are using OS disk type as locally redundant storage (LRS) disks you can migrate them to zone redundant storage (ZRS) disks. Please see the documentation [here](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-migrate-lrs-zrs?tabs=azure-portal). 
 5.	In networking tab, please provide the details as you normally would. You can choose to have a public IP if needed for testing this feature.   
 6.	Create a tag `EnableAvailabilityZoneUpdate: true` as below on virtual machine resource – 
 
