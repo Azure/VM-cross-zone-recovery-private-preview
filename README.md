@@ -6,3 +6,33 @@ Virtual machines can be recovered quickly from zonal outages by moving them acro
 
 Sign-up for the preview via this [form](https://aka.ms/ZRVMPreview).
 You will receive an email notification once you are enrolled for the preview.
+
+## Provide feedback 
+Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form) as you try out the preview. This will help us determine the pain points that can be overcome as we launch the next releases.
+
+## Unsupported VM configurations
+•	VM that are not pinned to an availability zone.
+•	Not supported VMs using [locally redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#locally-redundant-storage-for-managed-disks). as OS/Data disks.
+•	Public IP that are regional/have availability zone as “No Zone”
+•	Public IP with SKU as Basic.
+•	Private IP that are static. 
+
+## Get started
+In this preview customers will be able to move the existing/new virtual machine that meet the prerequisites across availability zone. 
+
+## Prerequisites
+•	VM must be deployed to a specific availability zone. 
+•	Ensure that the VM has the tag “EnableAvailabilityZoneUpdate: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
+•	Zone redundant disks data disks (premium/standard) must be used.
+•	Zone redundant OS disks (premium/standard) or Ephemeral OS disk must be used.
+•	Dynamic Private IP must be used.
+•	Public IP SKU should be standard.
+•	Load Balancer and Gateway should be of standard SKU.
+
+Please follow the below steps in order. For this example, a new VM is created. The feature will work for an existing VM please follow the from step 5 onwards if using existing VM. Ensure that the prerequisites are met for the existing VM. 
+
+1.	Create a VM in the subscription you have signed up for this preview.
+2.	Ensure the VM has an availability options set as Availability zone and zone options as self-selected zone. Choose an availability zone (1/2/3) as per your choice.
+   :::image type="content" source="./media/virtual-machines-create-restore-points-portal/create-restore-points-search.png" alt-text="Screenshot of search bar in Azure portal.":::
+
+3.	In disks tab, select the OS and data disks as zone redundant storage as below - 
