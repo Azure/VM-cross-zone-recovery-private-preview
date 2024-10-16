@@ -54,8 +54,8 @@ Please follow the below steps in order. For this example, a new VM is created. T
 2.	Uploading the script that orchestrates moving the VM across zones.
    
       a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
-  	
-         ![Screenshot4](./images/upload-script.png)
+
+  	![Screenshot3](./images/upload-script.png)
   	
       b.	Optionally you can copy the scripts content on a new file using editors.
    
