@@ -8,7 +8,7 @@ Sign-up for the preview via this [form](https://aka.ms/ZRVMPreview).
 You will receive an email notification once you are enrolled for the preview.
 
 ## Provide feedback 
-Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form) as you try out the preview. This will help us determine the pain points that can be overcome as we launch the next releases.
+Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm) as you try out the preview. This will help us determine the pain points that can be overcome as we launch the next releases.
 
 ## Unsupported VM configurations
 - VM that are not pinned to an availability zone.
@@ -74,7 +74,7 @@ Please follow the below steps in order. For this example, a new VM is created. T
 6.	Expected behaviour – 
 Refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
 
-7.	Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form). 
+7.	Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). 
 
 
   	
