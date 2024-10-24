@@ -15,7 +15,6 @@ Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form) as you try
 - VMs using [locally redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#locally-redundant-storage-for-managed-disks) as OS/Data disks.
 - Public IP that are regional/have availability zone as “No Zone”
 - Public IP with SKU as Basic.
-- Private IP that are static. 
 
 ## Get started
 In this preview customers will be able to move the existing/new virtual machine that meet the prerequisites across availability zone. 
@@ -25,7 +24,7 @@ In this preview customers will be able to move the existing/new virtual machine 
 - Ensure that the VM has the tag “EnableAvailabilityZoneUpdate: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
 - Zone redundant disks data disks (premium/standard) must be used.
 - Zone redundant OS disks (premium/standard) or Ephemeral OS disk must be used.
-- Dynamic Private IP must be used.
+- Static/Dynamic Private IP can be used.
 - Public IP SKU should be standard.
 - Load Balancer and Gateway should be of standard SKU.
 
@@ -63,7 +62,7 @@ Please follow the below steps in order. For this example, a new VM is created. T
 
 5.	To move the VM across zone issue the below command on the CloudShell interface from portal.
    
-   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -newNetworkResourceId {networkResourceId}`
+   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
 
 | Parameter | Description |
 | --- | --- |
@@ -71,11 +70,10 @@ Please follow the below steps in order. For this example, a new VM is created. T
 |ResourceGroupName|Virtual machine resource group.|
 |vmName|Virtual machine name.|
 |targetZone|New availability zone for virtual machine.|
-|(Optional) newNetworkResourceId|Resource ID for new network interface card to be attached to recovered virtual machine.|
 
 6.	Expected behaviour – 
 Refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
-Optionally if you have provided a new network interface id the same ranges will be used to assign the IP address of the recovered VM.
+
 7.	Please fill up this [feedback form](https://aka.ms/ZRVMFeedback-form). 
 
 
