@@ -75,7 +75,7 @@ function ForceDeallocate {
         [string]$token
     )
     
-    $uri = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Compute/virtualMachines/$vmName/deallocate`?api-version=2024-07-01&forceDeallocate=true"
+    $uri = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Compute/virtualMachines/$vmName/deallocate`?api-version=2024-07-01"
     $headers = @{
         "Authorization" = "Bearer $token"
         "Content-Type" = "application/json"
