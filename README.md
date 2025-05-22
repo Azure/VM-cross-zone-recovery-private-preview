@@ -21,7 +21,7 @@ Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm) as y
 In this preview customers will be able to move the existing/new virtual machine that meet the prerequisites across availability zone. 
 
 ## Prerequisites
-- **Regions supported:** East Asia and UK South. Remaining regions will be available by end of Mar 2025.
+- **Regions supported:** All azure regions except national clouds.
 - VM must be deployed to a specific availability zone. 
 - Ensure that the VM has the tag “EnableAvailabilityZoneUpdate: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
 - Zone redundant disks data disks (premium/standard) must be used.
