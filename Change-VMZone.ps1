@@ -75,7 +75,7 @@ function ForceDeallocate {
         [string]$token
     )
     
-    $uri = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Compute/virtualMachines/$vmName/deallocate`?api-version=2024-07-01"
+    $uri = "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.Compute/virtualMachines/$vmName/deallocate`?api-version=2024-07-01&forceDeallocate=true"
     $headers = @{
         "Authorization" = "Bearer $token"
         "Content-Type" = "application/json"
@@ -203,3 +203,4 @@ Write-Output "Updating zone"
 UpdateZone -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -targetZone $targetZone -token $token -newNetworkProfile $networkProfile
 Write-Output "Starting the VM"
 StartVM -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -token $token
+
