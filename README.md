@@ -17,8 +17,8 @@ Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm) as y
 In this private preview customers will be able to move the existing/new virtual machine that meet the prerequisites across availability zone.
 
 ## Supported configurations
-- **Regions supported:** All azure production regions.
-- VM must be deployed to a specific availability zone. 
+- **Regions supported:** All azure production regions that support availability zones. For a list of these regions, see [Azure regions list](https://learn.microsoft.com/en-us/azure/reliability/regions-list#azure-regions-list-1).
+- New VM must be deployed to a specific availability zone. 
 - Ensure that the VM has the tag “useNRPDeallocateOnFabricFailure: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
 - Zone redundant disks data disks (premium/standard) must be used.
 - Zone redundant OS disks (premium/standard).
@@ -29,7 +29,7 @@ In this private preview customers will be able to move the existing/new virtual 
 
 
 ### Create a VM via API
-Please follow the below steps in order. For this example, a new VM is created. The feature will work for an existing VM. If using existing VM please follow from step 4 onwards. Ensure that the prerequisites are met for the existing VM. 
+Please follow the below steps in order. The feature will work only for new VMs. Existing VMs will be supported in later milestones.  
 
 1.	Create a VM in the subscription you have signed up for this preview.
 2. Use any of these [examples](https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/create-or-update?view=rest-compute-2025-04-01&tabs=HTTP#examples) to create a VM. Make sure to:
