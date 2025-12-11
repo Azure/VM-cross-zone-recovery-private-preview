@@ -18,7 +18,8 @@ In this private preview customers will be able to move the existing/new virtual 
 
 ## Supported configurations
 - **Regions supported:** All azure production regions that support availability zones. For a list of these regions, see [Azure regions list](https://learn.microsoft.com/en-us/azure/reliability/regions-list#azure-regions-list-1).
-- New VM must be deployed to a specific availability zone. 
+- New VM must be deployed to a specific availability zone.
+- API version: **2025-04-01**
 - Ensure that the VM has the tag “useNRPDeallocateOnFabricFailure: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
 - Zone redundant disks data disks (premium/standard) must be used.
 - Zone redundant OS disks (premium/standard).
@@ -56,11 +57,11 @@ PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{
 ## Moving the VM across zone using API commands
 1. Force-deallocate the VM 
 ```http
-POST https://management.azure.com/subscriptions/{subscription Id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/deallocate?api-version=2024-07-01&forceDeallocate=true
+POST https://management.azure.com/subscriptions/{subscription Id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/deallocate?api-version=2025-04-01&forceDeallocate=true
 ```
 2.	Update the zone: 
    ```http
-   PUT https://management.azure.com/subscriptions/{subscription Id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}?api-version=2024-07-01
+   PUT https://management.azure.com/subscriptions/{subscription Id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}?api-version=2025-04-01
    ```
 ##### Request Body
 ```json
@@ -74,7 +75,7 @@ POST https://management.azure.com/subscriptions/{subscription Id}/resourceGroups
 ```
 3.	Start VM: 
 ```http
-POST https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/start?api-version=2024-07-01
+POST https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/start?api-version=2025-04-01
 ```
 ## Changing zone of VM via PS script
 1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
