@@ -39,7 +39,7 @@ Please follow the below steps in order. The feature will work only for new VMs. 
 4. Review and create the VM successfully along with the tag.   
 5.	Issue a PATCH VM call on the VM created in the above step.
 ```http
-PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}?api-version=2024-07-01  
+PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}?api-version=2025-04-01  
 ```
 ##### Request Body
 ```json
