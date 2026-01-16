@@ -91,6 +91,10 @@ POST https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/
 
 5.	To move the VM across zone issue the below command on the CloudShell interface from portal.
    
+   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
+   
+   Or
+   
    `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
 
 | Parameter | Description |
