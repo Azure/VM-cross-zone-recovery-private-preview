@@ -12,7 +12,10 @@ param (
     [string]$targetZone,
 
     [Parameter(Mandatory=$false)]
-    [string]$newNetworkResourceId
+    [string]$newNetworkResourceId,
+
+    [Parameter(Mandatory=$false)]
+    [string]$authMode
 )
 
 $ErrorActionPreference = "Stop"
@@ -194,7 +197,28 @@ if ($newNetworkResourceId) {
     $networkProfile = $networkProfile | ConvertTo-Json -Depth 5
 } else {$networkProfile = $null}
 
-Connect-AzAccount -SubscriptionId $subscriptionId
+
+# --- Make script non-interactive & fail-fast ---
+$ErrorActionPreference = 'Stop'                    # treat errors as fatal
+$ConfirmPreference     = 'None'                    # suppress Confirm prompts globally
+$ProgressPreference    = 'SilentlyContinue'        # hide progress bars
+$InformationPreference = 'SilentlyContinue'        # suppress informational messages
+$WarningPreference     = 'Continue'                # show warnings but don't block
+
+# --- Default parameter values for all cmdlets ---
+$PSDefaultParameterValues = @{
+    '*:Confirm'          = $false                  # equivalent to -Confirm:$false
+    '*:Verbose'          = $false
+    '*:ErrorAction'      = 'Stop'                  # consistent error semantics
+    'Start-Process:Wait' = $true                   # avoid race conditions
+}
+
+if ($authMode -eq "DeviceAuthentication") {
+    Connect-AzAccount -SubscriptionId $subscriptionId -UseDeviceAuthentication
+}
+else {
+    Connect-AzAccount -SubscriptionId $subscriptionId
+}
 $token = (Get-AzAccessToken).Token
 
 Write-Output "Stopping the VM."
@@ -203,4 +227,3 @@ Write-Output "Updating zone"
 UpdateZone -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -targetZone $targetZone -token $token -newNetworkProfile $networkProfile
 Write-Output "Starting the VM"
 StartVM -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -token $token
-
