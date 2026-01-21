@@ -28,6 +28,9 @@ In this private preview customers will be able to move the existing/new virtual 
 - Load Balancer and Gateway should be of standard SKU and zone redundant.
 - Supported only via Rest API.
 
+## Known limitations that will be supported in the next milestones
+- Azure Site Recovery is not supported.
+- On-demand capacity reservation if enabled is not supported.
 
 ### Create a VM via API
 Please follow the below steps in order. The feature will work only for new VMs. Existing VMs will be supported in later milestones.  
@@ -107,7 +110,26 @@ POST https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/
 6.	Expected behaviour – 
 Refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
 
-7.	Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). 
+## Disabling the feature
+Issue a PATCH VM call on the VM created in the above step.
+```http
+PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}?api-version=2025-04-01  
+```
+##### Request Body
+```json
+{
+  "location": "westeurope",
+  "properties": {
+    "resiliencyProfile": {
+      "zoneMovement": {
+        "isEnabled": false
+      }
+    }
+  }
+}
+```
+
+Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). 
 
 
   	
