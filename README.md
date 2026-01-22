@@ -6,7 +6,7 @@ Virtual machines can be recovered quickly from zonal outages by moving them acro
 
 ## Sign up for preview
 
-Sign-up for the preview via this [form](https://aka.ms/ZRVMPreview).
+Sign-up for the preview via this [form](https://forms.office.com/r/hDYGc0gXwT).
 You will receive an email notification once you are enrolled for the preview.It takes ~4 business days to complete the process.
 
 
