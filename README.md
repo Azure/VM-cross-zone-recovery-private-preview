@@ -32,6 +32,11 @@ In this private preview customers will be able to move the existing/new virtual 
 - Azure Site Recovery is not supported. This will be supported in future milestones.
 - On-demand capacity reservation if enabled is not supported.This will be supported in future milestones.
 - VMs having Data disks with write-accelerated enabled are not supported.
+
+## Prequisites 
+- Create a Virtual machine with configurations mentioned in the supported configuration section.
+
+  
 ## Testing the feature via PS script
 1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
 2.	Uploading the script that orchestrates enablement of the feature on the VM and moving the VM across zones.
@@ -42,7 +47,7 @@ In this private preview customers will be able to move the existing/new virtual 
   	
       b.	Optionally you can copy the scripts content on a new file using editors.
    
-4.	To enable the VM with the zoneMovement feature use the below command:
+4.	To enable the VM with the zoneMovement feature use the below command. The enablement of the feature needs to be done when the zone is healthy. 
 
       `.\Enable-VMZoneMovement.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName}`
 
