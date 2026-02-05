@@ -43,6 +43,7 @@ In this private preview customers will be able to move the existing/new virtual 
       b.	Optionally you can copy the scripts content on a new file using editors.
    
 4.	To enable the VM with the zoneMovement feature use the below command:
+
       `.\Enable-VMZoneMovement.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName}`
 
   	This command will enable the feature like below
@@ -65,7 +66,10 @@ In this private preview customers will be able to move the existing/new virtual 
 |targetZone|New availability zone for virtual machine.|
 
 6.	Expected behaviour – 
-The script enables the Zone movement feature on the VM mentioned in Step 5. The script then performs the move. You can refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
+The script Enable-VMZoneMovement.ps1 enables the Zone movement feature on the VM mentioned in Step 4. The script Change-VMZone.ps1 then performs the move. You can refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
+Please follow the instructions in the end for disabling this feature.
+
+##### Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). This will help us determine the pain points that can be overcome as we launch the next releases.
 
 ## Testing via API Commands
 ### Create a VM via API
