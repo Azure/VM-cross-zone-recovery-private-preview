@@ -21,17 +21,48 @@ In this private preview customers will be able to move the existing/new virtual 
 - New VM must be deployed to a specific availability zone.
 - API version: **2025-04-01**
 - Ensure that the VM has the tag “useNRPDeallocateOnFabricFailure: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
-- Zone redundant disks data disks (premium/standard) must be used.
-- Zone redundant OS disks (premium/standard).
-- Static/Dynamic Private IP can be used.
+- Data disk (if used) should be Zone redundant disks data disks (premium/standard).
+- OS disks should be Zone redundant (premium/standard) disks.
+- Private IP Static/Dynamic can be used.
 - Public IP if used should have standard SKU and must be zone redundant.
 - Load Balancer and Gateway should be of standard SKU and zone redundant.
-- Supported only via Rest API.
+- Supported only via Rest API. We have provided scripts to test the feature easily. 
 
-## Known limitations that will be supported in the next milestones
-- Azure Site Recovery is not supported.
-- On-demand capacity reservation if enabled is not supported.
+## Known limitations 
+- Azure Site Recovery is not supported. This will be supported in future milestones.
+- On-demand capacity reservation if enabled is not supported.This will be supported in future milestones.
+- VMs having Data disks with write-accelerated enabled are not supported.
+## Testing the feature via PS script
+1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
+2.	Uploading the script that orchestrates moving the VM across zones.
+   
+      a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
 
+  	![Screenshot3](./images/upload-script.png)
+  	
+      b.	Optionally you can copy the scripts content on a new file using editors.
+   
+4.	Note the availability zone and the IP address (Public and Private) of the VM you are testing.
+
+5.	To move the VM across zone issue the below command on the CloudShell interface from portal.
+   
+   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
+   
+   Or
+   
+   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
+
+| Parameter | Description |
+| --- | --- |
+|SubscriptionId | Virtual machine subscription ID.|
+|ResourceGroupName|Virtual machine resource group.|
+|vmName|Virtual machine name.|
+|targetZone|New availability zone for virtual machine.|
+
+6.	Expected behaviour – 
+The script enables the Zone movement feature on the VM mentioned in Step 5. The script then performs the move. You can refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
+
+## Testing via API Commands
 ### Create a VM via API
 Please follow the below steps in order. The feature will work only for new VMs. Existing VMs will be supported in later milestones.  
 
@@ -80,35 +111,6 @@ POST https://management.azure.com/subscriptions/{subscription Id}/resourceGroups
 ```http
 POST https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/start?api-version=2025-04-01
 ```
-## Changing zone of VM via PS script
-1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
-2.	Uploading the script that orchestrates moving the VM across zones.
-   
-      a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
-
-  	![Screenshot3](./images/upload-script.png)
-  	
-      b.	Optionally you can copy the scripts content on a new file using editors.
-   
-4.	Note the availability zone and the IP address (Public and Private) of the VM you are testing.
-
-5.	To move the VM across zone issue the below command on the CloudShell interface from portal.
-   
-   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
-   
-   Or
-   
-   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
-
-| Parameter | Description |
-| --- | --- |
-|SubscriptionId | Virtual machine subscription ID.|
-|ResourceGroupName|Virtual machine resource group.|
-|vmName|Virtual machine name.|
-|targetZone|New availability zone for virtual machine.|
-
-6.	Expected behaviour – 
-Refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
 
 ## Disabling the feature
 Issue a PATCH VM call on the VM created in the above step.
