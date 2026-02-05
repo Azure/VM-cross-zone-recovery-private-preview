@@ -219,11 +219,30 @@ if ($authMode -eq "DeviceAuthentication") {
 else {
     Connect-AzAccount -SubscriptionId $subscriptionId
 }
-$token = (Get-AzAccessToken).Token
+
+
+# --------------------------
+# Get access token
+# --------------------------
+try {
+    # Note: ResourceUrl must have trailing slash for Cloud Shell compatibility
+    $token = Get-AzAccessToken -ResourceUrl "https://management.azure.com/"
+    # Handle both string and SecureString token types
+    if ($token.Token -is [System.Security.SecureString]) {
+        $accessToken = [System.Net.NetworkCredential]::new('', $token.Token).Password
+    }
+    else {
+        $accessToken = $token.Token
+    }
+}
+catch {
+    Write-Error "Failed to get access token: $_"
+    exit 1
+}
 
 Write-Output "Stopping the VM."
-ForceDeallocate -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -token $token
+ForceDeallocate -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -token $accessToken
 Write-Output "Updating zone"
-UpdateZone -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -targetZone $targetZone -token $token -newNetworkProfile $networkProfile
+UpdateZone -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -targetZone $targetZone -token $accessToken -newNetworkProfile $networkProfile
 Write-Output "Starting the VM"
-StartVM -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -token $token
+StartVM -subscriptionId $subscriptionId -resourceGroupName $resourceGroupName -vmName $vmName -token $accessToken
