@@ -34,23 +34,28 @@ In this private preview customers will be able to move the existing/new virtual 
 - VMs having Data disks with write-accelerated enabled are not supported.
 ## Testing the feature via PS script
 1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
-2.	Uploading the script that orchestrates moving the VM across zones.
+2.	Uploading the script that orchestrates enablement of the feature on the VM and moving the VM across zones.
    
-      a.	Upload the script [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
+      a.	Upload the scripts [Enable-VMZoneMovement.ps1](./Enable-VMZoneMovement.ps1) and [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
 
-  	![Screenshot3](./images/upload-script.png)
+  	![Screenshot1](./images/upload-script.png)
   	
       b.	Optionally you can copy the scripts content on a new file using editors.
    
-4.	Note the availability zone and the IP address (Public and Private) of the VM you are testing.
+4.	To enable the VM with the zoneMovement feature use the below command:
+      `.\Enable-VMZoneMovement.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName}`
 
-5.	To move the VM across zone issue the below command on the CloudShell interface from portal.
+  	This command will enable the feature like below
+  	
+  	![Screenshot2](./ZR-VM-Enable-Movement-output-ps.jpg)
+
+6.	To move the VM across zone issue the below command on the CloudShell interface from portal.
    
-   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
-   
-   Or
-   
-   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
+     `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
+
+  	   Or
+  	
+  	   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
 
 | Parameter | Description |
 | --- | --- |
