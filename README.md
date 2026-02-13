@@ -13,7 +13,7 @@ Virtual machines can be recovered quickly from zonal outages by moving them acro
       `Register-AzProviderFeature -FeatureName 'ForceDeallocateVMPreview' -ProviderNamespace 'Microsoft.Compute'`
 -  4. Run
       `Register-AzProviderFeature -FeatureName 'VMAvailabilityZoneUpdate' -ProviderNamespace 'Microsoft.Compute'`
-
+- Please check below on how to [disable the feature](#Disabling-the-feature) along with unregistering this feature.
 
 ## Provide feedback 
 Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm) as you try out the preview. This will help us determine the pain points that can be overcome as we launch the next releases.
@@ -149,6 +149,14 @@ PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{
   }
 }
 ```
+
+To unregister this feature. Open the Cloud shell (PowerShell) from portal. Direct link -> <a href="https://shell.azure.com/" rel="noreferrer noopener" title="https://shell.azure.com/" target="_blank">https://shell.azure.com/</a> and run the below commands:  
+
+- Run
+      `Unregister-AzProviderFeature -FeatureName 'ForceDeallocateVMPreview' -ProviderNamespace 'Microsoft.Compute'`
+- Run
+      `Unregister-AzProviderFeature -FeatureName 'VMAvailabilityZoneUpdate' -ProviderNamespace 'Microsoft.Compute'`
+
 
 Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). 
 
