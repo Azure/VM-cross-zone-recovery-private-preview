@@ -23,7 +23,7 @@ Failover is customer-initiated and interrupts the workload while the VM is deall
 4. Follow the documented procedure to [fail over a VM to another zone](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#fail-over-a-vm-to-another-zone).
 5. [Verify the VM and workload](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#verify-failover-succeeded) before restoring traffic. If needed, follow the [troubleshooting guidance](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#troubleshoot-failover).
 
-The public preview supports the Azure portal, Azure CLI version **2.87.0 or later**, Azure PowerShell with zone movement and force deallocation support, and Compute REST API version **`2026-03-01`**. The guide also includes Bicep examples. Use its tool-specific instructions rather than the scripts in this repository.
+The public preview supports the Azure portal, Azure CLI version **2.87.0 or later**, Azure PowerShell with Az module version **16.3.0 or later** and Az.Compute module version **11.9.0 or later**, and Compute REST API version **`2026-03-01`**. The guide also includes Bicep examples. Use its tool-specific instructions rather than the scripts in this repository.
 
 ## Key limitations
 
