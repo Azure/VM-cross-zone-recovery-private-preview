@@ -1,164 +1,53 @@
-# Private preview to Enable Movement of VMs across zones during zonal outage
+# Zone resilience for Azure VMs (Preview)
 
-Virtual machines can be recovered quickly from zonal outages by moving them across availability zones. This solution guarantees a Recovery Point Objective (RPO) of zero and a minimal Recovery Time Objective (RTO) in minutes. By using [zone redundant disks](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#zone-redundant-storage-for-managed-disks) we will are able to provide an RPO of 0. As the feature is dependent on zone redundant disks all its [limitation](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-redundancy#limitations) will apply to the recovery solution as well.
+**Zone resilience for Azure VMs is now in public preview.** For current requirements and step-by-step instructions, see [Zone resilience for Azure VMs on Microsoft Learn](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience).
 
-**NOTE: This feature should not be used for production workloads until General Availability (GA). Microsoft Privacy Statement: https://privacy.microsoft.com/en-us/privacystatement**
+This repository contains scripts and templates from the private preview. For the public preview, use the Microsoft Learn guide instead of the earlier private-preview registration, VM tag, script, and API instructions.
 
-## Sign up for preview
+> [!IMPORTANT]
+> Zone resilience for Azure VMs is in preview. Use this preview only for evaluation and testing with nonproduction VMs. Don't use it for production VMs. For more information, see [Supplemental Terms of Use for Microsoft Azure Previews](https://azure.microsoft.com/support/legal/preview-supplemental-terms/).
 
-- Customer can sign up by themselves.
--  1. Open the Cloud shell (PowerShell) from portal. Direct link -> <a href="https://shell.azure.com/" rel="noreferrer noopener" title="https://shell.azure.com/" target="_blank">https://shell.azure.com/</a>
--  2. Ensure your using the subscription which will be used for testing this feature.
--  3. Run
-      `Register-AzProviderFeature -FeatureName 'ForceDeallocateVMPreview' -ProviderNamespace 'Microsoft.Compute'`
--  4. Run
-      `Register-AzProviderFeature -FeatureName 'VMAvailabilityZoneUpdate' -ProviderNamespace 'Microsoft.Compute'`
-- Please check below on how to [disable the feature](#Disabling-the-feature) along with unregistering this feature.
+## Overview
 
-## Provide feedback 
-Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm) as you try out the preview. This will help us determine the pain points that can be overcome as we launch the next releases.
+Zone resilience lets you initiate failover of an eligible zonal Azure virtual machine (VM) to another availability zone in the same region. It changes the zone placement of the existing VM without creating a replacement, preserving its resource ID, VM ID, attached network interface and IP configuration, supported zone-redundant storage (ZRS) managed disks, and other supported resource settings.
 
-## Get started
-In this private preview customers will be able to move the existing/new virtual machine that meet the prerequisites across availability zone.
+ZRS synchronously replicates managed disk data across availability zones, providing a near-zero recovery point objective (RPO) for data committed to supported ZRS disks. Active requests, in-memory data, and runtime state aren't preserved.
 
-## Supported configurations
-- **Regions supported:** All azure production regions that support availability zones. For a list of these regions, see [Azure regions list](https://learn.microsoft.com/en-us/azure/reliability/regions-list#azure-regions-list-1).
-- New VM must be deployed to a specific availability zone.
-- API version: **2025-04-01**
-- Ensure that the VM has the tag “useNRPDeallocateOnFabricFailure: true”. The tag is crucial as you will not be able to move the VM across zones without this tag on the virtual machine.
-- Data disk (if used) should be Zone redundant disks data disks (premium/standard).
-- OS disks should be Zone redundant (premium/standard) disks.
-- Private IP Static/Dynamic can be used.
-- Public IP if used should have standard SKU and must be zone redundant.
-- Load Balancer and Gateway should be of standard SKU and zone redundant.
-- Supported only via Rest API. We have provided scripts to test the feature easily. 
+Failover is customer-initiated and interrupts the workload while the VM is deallocated and started in the target zone. The target zone must support the VM size and have sufficient capacity. For high availability across zones, [deploy multiple VMs across availability zones](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-high-availability#deploy-vms-and-disks-across-three-availability-zones) and distribute traffic between them.
 
-## Known limitations 
-- Azure Site Recovery is not supported. This will be supported in future milestones.
-- On-demand capacity reservation if enabled is not supported.This will be supported in future milestones.
-- VMs having Data disks with write-accelerated enabled are not supported.
+## Get started with the public preview
 
-## Prequisites 
-- Create a Virtual machine with configurations mentioned in the supported configuration section.
+1. Review the current [requirements](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#requirements) and [limitations](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#limitations).
+2. [Prepare an eligible nonproduction VM](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#prepare-a-vm-for-zone-failover). The OS disk and every attached data disk must use Premium SSD ZRS or Standard SSD ZRS. If used, public IP addresses must be zone-redundant Standard SKU, and load balancers or supported gateways must meet the documented network requirements.
+3. [Enable zone resilience](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#enable-zone-movement) while the source zone is healthy. You can enable it when creating a VM or on an eligible existing zonal VM. Deallocate an existing VM before enabling it, then start the VM after the update succeeds.
+4. Follow the documented procedure to [fail over a VM to another zone](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#fail-over-a-vm-to-another-zone).
+5. [Verify the VM and workload](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#verify-failover-succeeded) before restoring traffic. If needed, follow the [troubleshooting guidance](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#troubleshoot-failover).
 
-  
-## Testing the feature via PS script
-1.	Open the Cloud shell (PowerShell) from portal. Direct link -> https://shell.azure.com/ 
-2.	Uploading the script that orchestrates enablement of the feature on the VM and moving the VM across zones.
-   
-      a.	Upload the scripts [Enable-VMZoneMovement.ps1](./Enable-VMZoneMovement.ps1) and [Change-VMZone.ps1](./Change-VMZone.ps1) to cloud shell by navigating to Manage files -> Upload.
+The public preview supports the Azure portal, Azure CLI version **2.87.0 or later**, Azure PowerShell with zone movement and force deallocation support, and Compute REST API version **`2026-03-01`**. The guide also includes Bicep examples. Use its tool-specific instructions rather than the scripts in this repository.
 
-  	![Screenshot1](./images/upload-script.png)
-  	
-      b.	Optionally you can copy the scripts content on a new file using editors.
-   
-4.	To enable the VM with the zoneMovement feature use the below command. The enablement of the feature needs to be done when the zone is healthy. 
+## Key limitations
 
-      `.\Enable-VMZoneMovement.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName}`
+- Failover is limited to another availability zone in the same region. It doesn't protect against regional outages or outages that affect multiple zones.
+- Failover can fail if the target zone has insufficient capacity for the VM size.
+- Locally redundant storage (LRS) disks, ephemeral OS disks, Premium SSD v2, Ultra Disks, Standard HDD managed disks, and data disks with write acceleration aren't supported.
+- VM scale sets, availability set VMs, and Spot VMs aren't supported.
+- Azure Site Recovery, on-demand capacity reservations, dedicated hosts, and proximity placement groups aren't supported for VMs with zone resilience enabled.
+- The feature doesn't provide automatic failover, application-level consistency, traffic failover, recovery plans, or failback orchestration.
 
-  	This command will enable the feature like below
-  	
-  	![Screenshot2](./ZR-VM-Enable-Movement-output-ps.jpg)
+See the [full limitations](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#limitations) before enabling the feature.
 
-6.	To move the VM across zone issue the below command on the CloudShell interface from portal.
-   
-     `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3}`
+## Disable zone resilience
 
-  	   Or
-  	
+Follow [Disable zone resilience](https://learn.microsoft.com/en-us/azure/virtual-machines/zone-resilience#disable-zone-movement) in the public-preview guide. Deallocate the VM before disabling zone movement, wait for the update to succeed, and then start the VM. Deallocation interrupts the workload.
+
+## Provide feedback
+
+Share your evaluation experience through the [preview feedback form](https://aka.ms/ZRVMPreviewFeedbackForm).
+
+[Microsoft Privacy Statement](https://privacy.microsoft.com/en-us/privacystatement)
   	   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
 
+
+
 | Parameter | Description |
-| --- | --- |
-|SubscriptionId | Virtual machine subscription ID.|
-|ResourceGroupName|Virtual machine resource group.|
-|vmName|Virtual machine name.|
-|targetZone|New availability zone for virtual machine.|
 
-6.	Expected behaviour – 
-The script Enable-VMZoneMovement.ps1 enables the Zone movement feature on the VM mentioned in Step 4. The script Change-VMZone.ps1 then performs the move. You can refresh the overview blade in the portal for the virtual machine, you would see the VM state change from running to deallocating to deallocated. Within few minutes the VM state will be set to running and the availability zone would be the targetZone provided in the command.
-Please follow the instructions in the end for disabling this feature.
-
-##### Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). This will help us determine the pain points that can be overcome as we launch the next releases.
-
-## Testing via API Commands
-### Create a VM via API
-Please follow the below steps in order. The feature will work only for new VMs. Existing VMs will be supported in later milestones.  
-
-1.	Create a VM in the subscription you have signed up for this preview.
-2. Use any of these [examples](https://learn.microsoft.com/en-us/rest/api/compute/virtual-machines/create-or-update?view=rest-compute-2025-04-01&tabs=HTTP#examples) to create a VM. Make sure to:
-   - Use zone redundant storage (ZRS) disks for both OS and data disks. Please see the documentation [here](https://learn.microsoft.com/en-us/azure/virtual-machines/disks-migrate-lrs-zrs?tabs=azure-portal) to migrate an existing LRS disk to ZRS.
-3. Create a tag `useNRPDeallocateOnFabricFailure: true`. This is crucial as the VM cannot be moved across zones without the tag.
-4. Review and create the VM successfully along with the tag.   
-5.	Issue a PATCH VM call on the VM created in the above step.
-```http
-PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}?api-version=2025-04-01  
-```
-##### Request Body
-```json
-{
-  "location": "westeurope",
-  "properties": {
-    "resiliencyProfile": {
-      "zoneMovement": {
-        "isEnabled": true
-      }
-    }
-  }
-}
-```
-## Moving the VM across zone using API commands
-1. Force-deallocate the VM 
-```http
-POST https://management.azure.com/subscriptions/{subscription Id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/deallocate?api-version=2025-04-01&forceDeallocate=true
-```
-2.	Update the zone: 
-   ```http
-   PUT https://management.azure.com/subscriptions/{subscription Id}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}?api-version=2025-04-01
-   ```
-##### Request Body
-```json
-{
-  "name": "vmname",
-  "location": "westeurope",
-  "zones": [
-    "2"
-  ]
-} 
-```
-3.	Start VM: 
-```http
-POST https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmname}/start?api-version=2025-04-01
-```
-
-## Disabling the feature
-Issue a PATCH VM call on the VM created in the above step.
-```http
-PUT https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Compute/virtualMachines/{vmName}?api-version=2025-04-01  
-```
-##### Request Body
-```json
-{
-  "location": "westeurope",
-  "properties": {
-    "resiliencyProfile": {
-      "zoneMovement": {
-        "isEnabled": false
-      }
-    }
-  }
-}
-```
-
-To unregister this feature. Open the Cloud shell (PowerShell) from portal. Direct link -> <a href="https://shell.azure.com/" rel="noreferrer noopener" title="https://shell.azure.com/" target="_blank">https://shell.azure.com/</a> and run the below commands:  
-
-- Run
-      `Unregister-AzProviderFeature -FeatureName 'ForceDeallocateVMPreview' -ProviderNamespace 'Microsoft.Compute'`
-- Run
-      `Unregister-AzProviderFeature -FeatureName 'VMAvailabilityZoneUpdate' -ProviderNamespace 'Microsoft.Compute'`
-
-
-Please fill up this [feedback form](https://aka.ms/ZRVMPreviewFeedbackForm). 
-
-
-  	
