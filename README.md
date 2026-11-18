@@ -45,9 +45,3 @@ Follow [Disable zone resilience](https://learn.microsoft.com/en-us/azure/virtual
 Share your evaluation experience through the [preview feedback form](https://aka.ms/ZRVMPreviewFeedbackForm).
 
 [Microsoft Privacy Statement](https://privacy.microsoft.com/en-us/privacystatement)
-  	   `.\Change-VMZone.ps1 -subscriptionId {subscriptionId} -resourceGroupName {resourceGroupName} -vmName {vmName} -targetZone {1 or 2 or 3} -authMode 'DeviceAuthentication'`
-
-
-
-| Parameter | Description |
-
